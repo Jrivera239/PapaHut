@@ -1,28 +1,64 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let cartContainer = document.getElementById("cart-items");
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartContainer = document.getElementById("cart-items");
+    const cartTotal = document.getElementById("cart-total");
+    const clearCartButton = document.getElementById("clear-cart");
 
-    if (cart.length === 0) {
-        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
-    } else {
+    // Function to update the cart display
+    function updateCartDisplay() {
+        cartContainer.innerHTML = ""; // Clear previous content
+        let total = 0;
+
         cart.forEach((item, index) => {
-            let cartItem = document.createElement("div");
-            cartItem.classList.add("cart-item");
-            cartItem.innerHTML = `
-                <p><strong>${item.name}</strong> - ${item.topping} - $${item.price.toFixed(2)}</p>
+            let li = document.createElement("li");
+            li.innerHTML = `
+                ${item.name} - $${item.price.toFixed(2)} 
                 <button class="remove-item" data-index="${index}">Remove</button>
             `;
-            cartContainer.appendChild(cartItem);
+            cartContainer.appendChild(li);
+            total += item.price;
         });
 
-        // Remove items
-        document.querySelectorAll(".remove-item").forEach((button) => {
+        cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+
+        // Add event listeners for remove buttons
+        document.querySelectorAll(".remove-item").forEach(button => {
             button.addEventListener("click", function () {
-                let index = this.getAttribute("data-index");
+                const index = this.getAttribute("data-index");
                 cart.splice(index, 1);
                 localStorage.setItem("cart", JSON.stringify(cart));
-                location.reload(); // Refresh to update the cart
+                updateCartDisplay();
             });
         });
     }
+
+    // Function to add items to the cart
+    function addToCart(name, price, button) {
+        cart.push({ name, price });
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartDisplay();
+
+        // Disable the button temporarily to prevent multiple presses
+        button.disabled = true;
+        setTimeout(() => button.disabled = false, 1000);
+    }
+
+    // Attach event listeners to "Add to Cart" buttons
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+        button.addEventListener("click", function () {
+            const name = this.parentElement.querySelector("h3").textContent;
+            const price = parseFloat(this.parentElement.querySelector(".price").textContent.replace("$", ""));
+            addToCart(name, price, this);
+        });
+    });
+
+    // Clear cart function
+    clearCartButton.addEventListener("click", function () {
+        localStorage.removeItem("cart");
+        cart = [];
+        updateCartDisplay();
+    });
+
+    // Initial cart display update
+    updateCartDisplay();
 });
