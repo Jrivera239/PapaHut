@@ -117,6 +117,32 @@ button:hover, .add-to-cart:hover, .checkout-btn:hover {
     transform: scale(1.05);
     background: linear-gradient(to bottom right, #ff6347, #ffcc00);
 }
+.pizza-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 350px; /* Adjust the box size */
+    background-color: rgba(255, 255, 255, 0.9); /* Soft white background */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin: 10px auto;
+}
+
+.pizza-item img {
+    max-width: 100%; /* Ensures image fits container */
+    height: 200px; /* Fixed height for uniformity */
+    object-fit: cover; /* Crops and scales images properly */
+    border-radius: 8px;
+}
+.pizza-item img {
+    max-width: 100%; /* Ensures image does not exceed container width */
+    height: 200px; /* Uniform height */
+    object-fit: cover; /* Prevents stretching, maintains aspect ratio */
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto; /* Centers the image */
+}
 
 .cart {
     margin: 50px auto;
