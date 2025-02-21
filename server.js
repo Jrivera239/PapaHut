@@ -10,7 +10,7 @@ app.use(cors());
 const db = mysql.createConnection({
     host: "localhost",
     user: "root", // Change as needed
-    password: "", // Add your MySQL password if set
+    password: "pass123", // Add your MySQL password if set
     database: "papa_hut_db"
 });
 
