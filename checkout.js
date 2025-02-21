@@ -1,32 +1,32 @@
-document.addEventListener("DOMContentLoaded", () => {
-    displayOrderSummary();
-});
+const payButton = document.getElementById("pay-button");
+const paymentMethod = document.getElementById("payment-method"); // Dropdown for payment selection
 
-function displayOrderSummary() {
-    const orderSummary = document.querySelector(".order-summary");
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    orderSummary.innerHTML = "";
-    let total = 0;
-    
-    cart.forEach((item) => {
-        const orderItem = document.createElement("div");
-        orderItem.classList.add("order-item");
-        orderItem.innerHTML = `
-            <h3>${item.name}</h3>
-            <p>Price: $${item.price.toFixed(2)}</p>
-        `;
-        orderSummary.appendChild(orderItem);
-        total += item.price;
-    });
-    
-    const totalElement = document.createElement("h3");
-    totalElement.textContent = `Total: $${total.toFixed(2)}`;
-    orderSummary.appendChild(totalElement);
-}
+payButton.addEventListener("click", async () => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-document.getElementById("payment-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    alert("Payment successful! Thank you for your order.");
-    localStorage.removeItem("cart");
-    window.location.href = "index.html";
+    if (cart.length === 0) {
+        alert("Your cart is empty. Please add items before checking out.");
+        return;
+    }
+
+    let selectedMethod = paymentMethod.value; // Get selected payment method
+
+    try {
+        const response = await fetch("http://localhost:5000/create-checkout-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cart, selectedMethod }),
+        });
+
+        const session = await response.json();
+
+        if (session.id) {
+            window.location.href = `https://checkout.stripe.com/pay/${session.id}`;
+        } else {
+            alert("Payment session creation failed.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Something went wrong. Try again.");
+    }
 });

@@ -15,7 +15,6 @@
                 <li><a href="menu.html">Menu</a></li>
                 <li><a href="cart.html">Cart</a></li>
                 <li><a href="checkout.html">Checkout</a></li>
-                <li><a href="admin.html">Admin Panel</a></li>
             </ul>
         </nav>
     </header>
@@ -44,6 +43,28 @@
                 <span>$13.99</span>
                 <button class="add-to-cart">Add to Cart</button>
             </div>
+            <div class="menu-container">
+                <div class="pizza-item">
+                    <img src="images/cheese_pizza.jpg" alt="Cheese Pizza">
+                    <h3>Cheese Pizza</h3>
+                    <p>Classic mozzarella cheese pizza.</p>
+                    <p>Base Price: $10.99</p>
+                    <label for="cheese-toppings">Choose Toppings:</label>
+                    <select class="topping-selector" data-base-price="10.99">
+                        <option value="0">No Extra Toppings</option>
+                        <option value="1.50">Bacon ($1.50)</option>
+                        <option value="1.00">Olives ($1.00)</option>
+                        <option value="0.75">Onion ($0.75)</option>
+                        <option value="1.50">Pepperoni ($1.50)</option>
+                        <option value="1.25">Parmesan ($1.25)</option>
+                        <option value="1.50">Salami ($1.50)</option>
+                        <option value="1.50">Sausage ($1.50)</option>
+                    </select>
+                    <p>Total: $<span class="total-price">10.99</span></p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
         </div>
     </section>
     

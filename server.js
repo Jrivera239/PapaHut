@@ -1,60 +1,38 @@
+require("dotenv").config();
 const express = require("express");
-const mysql = require("mysql");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const cors = require("cors");
-const Stripe = require('stripe');
-const stripe = Stripe('your-secret-key');
-app.use(express.static('public'));
-app.use(express.json());
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Database connection
-const db = mysql.createConnection({
-    host: "localhost",
-    user: "root", // Change as needed
-    password: "pass123", // Add your MySQL password if set
-    database: "papa_hut_db"
-});
+app.post("/create-checkout-session", async (req, res) => {
+    try {
+        const { cart } = req.body;
 
-db.connect((err) => {
-    if (err) {
-        console.error("Database connection failed:", err);
-    } else {
-        console.log("Connected to MySQL Database");
+        const lineItems = cart.map((item) => ({
+            price_data: {
+                currency: "usd",
+                product_data: { name: item.name, description: item.topping },
+                unit_amount: Math.round(item.price * 100), // Convert to cents
+            },
+            quantity: 1,
+        }));
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card", "paypal", "google_pay"], // Enables more payment methods
+            line_items: lineItems,
+            mode: "payment",
+            success_url: "http://localhost:5500/success.html",
+            cancel_url: "http://localhost:5500/cancel.html",
+        });
+
+        res.json({ id: session.id });
+    } catch (error) {
+        console.error("Error creating checkout session:", error);
+        res.status(500).json({ error: "Failed to create checkout session" });
     }
 });
 
-// API Routes
-
-// Fetch menu items
-app.get("/menu", (req, res) => {
-    db.query("SELECT * FROM menu", (err, results) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(results);
-    });
-});
-
-// Add menu item
-app.post("/menu", (req, res) => {
-    const { name, price } = req.body;
-    db.query("INSERT INTO menu (name, price) VALUES (?, ?)", [name, price], (err, result) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json({ message: "Item added successfully", id: result.insertId });
-    });
-});
-
-// Delete menu item
-app.delete("/menu/:id", (req, res) => {
-    const { id } = req.params;
-    db.query("DELETE FROM menu WHERE id = ?", [id], (err, result) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json({ message: "Item deleted successfully" });
-    });
-});
-
-// Start server
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+app.listen(5000, () => console.log("Server running on port 5000"));

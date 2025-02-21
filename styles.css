@@ -22,12 +22,53 @@ header {
     flex-direction: column;
     align-items: center;
 }
+/* Flexbox Layout for Menu */
+.menu-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
 
+/* Individual Pizza Item */
+.pizza-item {
+    flex: 1 1 300px; /* Flexible width with a min size */
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .menu-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.hero {
+    background: linear-gradient(to bottom right, #ff0000, #eeff00, #ff6f00);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    flex: 1 1
+}
 header h1 {
     margin: 0;
     font-size: 2.5em;
 }
-
+.btn1 {
+    background: rgba(0, 0, 0, 0.769);
+    color:rgb(242, 255, 0);
+    padding: 3px;
+    border-radius: 45%;
+    text-decoration: none;
+    
+}
 nav ul {
     list-style: none;
     padding: 0;
@@ -169,7 +210,7 @@ footer {
     }
 }
 .pizza-item {
-    
+    /* Add your styles here */
   }
   
   .pizza-item img {

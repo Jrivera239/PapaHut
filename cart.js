@@ -1,36 +1,28 @@
-let cart = [];
+document.addEventListener("DOMContentLoaded", function () {
+    let cartContainer = document.getElementById("cart-items");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateCart();
+    if (cart.length === 0) {
+        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+        cart.forEach((item, index) => {
+            let cartItem = document.createElement("div");
+            cartItem.classList.add("cart-item");
+            cartItem.innerHTML = `
+                <p><strong>${item.name}</strong> - ${item.topping} - $${item.price.toFixed(2)}</p>
+                <button class="remove-item" data-index="${index}">Remove</button>
+            `;
+            cartContainer.appendChild(cartItem);
+        });
+
+        // Remove items
+        document.querySelectorAll(".remove-item").forEach((button) => {
+            button.addEventListener("click", function () {
+                let index = this.getAttribute("data-index");
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                location.reload(); // Refresh to update the cart
+            });
+        });
+    }
 });
-
-function updateCart() {
-    const cartList = document.querySelector(".cart-list");
-    const cartTotal = document.getElementById("cart-total");
-    cartList.innerHTML = "";
-    let total = 0;
-    
-    cart.forEach((item, index) => {
-        const cartItem = document.createElement("div");
-        cartItem.classList.add("cart-item");
-        cartItem.innerHTML = `
-            <h3>${item.name}</h3>
-            <p>Price: $${item.price.toFixed(2)}</p>
-            <button onclick="removeFromCart(${index})">Remove</button>
-        `;
-        cartList.appendChild(cartItem);
-        total += item.price;
-    });
-    
-    cartTotal.textContent = `$${total.toFixed(2)}`;
-}
-
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCart();
-}
-
-function checkout() {
-    alert("Proceeding to checkout...");
-    // Redirect to checkout page or implement checkout process
-}

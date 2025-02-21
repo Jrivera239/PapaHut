@@ -35,3 +35,18 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (menu_id) REFERENCES menu(id) ON DELETE CASCADE
 );
+
+INSERT INTO pizzas (name, description, price, image_path) VALUES
+('Pepperoni Pizza', 'Delicious pepperoni with mozzarella cheese.', 12.99, 'images/pepperoni_pizza.jpg'),
+('Cheese Pizza', 'Classic cheese pizza with mozzarella.', 10.99, 'images/cheese_pizza.jpg'),
+('Supreme Pizza', 'Loaded with various toppings.', 14.99, 'images/supreme_pizza.jpg'),
+('Chicken Bacon Pizza', 'Grilled chicken with crispy bacon.', 13.99, 'images/chicken_bacon_pizza.jpg');
+
+INSERT INTO toppings (name, price) VALUES
+('Bacon', 1.50),
+('Olives', 1.00),
+('Onion', 0.75),
+('Pepperoni', 1.50),
+('Parmesan', 1.25),
+('Salami', 1.50),
+('Sausage', 1.50);
