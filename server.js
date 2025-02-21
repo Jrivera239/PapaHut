@@ -1,7 +1,10 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
-
+const Stripe = require('stripe');
+const stripe = Stripe('your-secret-key');
+app.use(express.static('public'));
+app.use(express.json());
 const app = express();
 app.use(express.json());
 app.use(cors());
